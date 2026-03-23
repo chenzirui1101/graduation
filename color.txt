@@ -1,0 +1,90 @@
+🎨 百事屋主题配色指南（青春活力版）
+一、配色原则
+明亮为主：避免暗沉、灰调，多用高饱和度、清新的颜色。
+
+对比活泼：通过互补色或邻近色制造视觉冲击，体现年轻感。
+
+渐变点缀：在按钮、卡片、导航等元素上使用渐变，增加动感。
+
+二、主色系建议
+用途	颜色名称	色值（Hex）	色值（RGB）	说明
+主品牌色	活力橙	#FF8A5C	rgb(255, 138, 92)	用于按钮、重要图标、导航高亮
+辅助色1	阳光黄	#FFD93D	rgb(255, 217, 61)	用于标签、促销标志、次要按钮
+辅助色2	清新绿	#6BCB77	rgb(107, 203, 119)	用于成功提示、绿色板块（如失物招领）
+辅助色3	天空蓝	#4D96FF	rgb(77, 150, 255)	用于链接、信息提示、蓝色板块
+背景色	柔白	#F9F9F9	rgb(249, 249, 249)	页面主背景，柔和不刺眼
+卡片背景	纯白	#FFFFFF	rgb(255, 255, 255)	卡片、表单等白色区域
+文字主色	深灰	#2E2E2E	rgb(46, 46, 46)	正文标题，保证可读性
+文字次要	中灰	#6B6B6B	rgb(107, 107, 107)	辅助文字、时间戳等
+三、渐变色建议（增强活力感）
+主按钮渐变：linear-gradient(135deg, #FF8A5C, #FFD93D)
+
+板块卡片悬停：linear-gradient(145deg, rgba(255,138,92,0.1), rgba(77,150,255,0.1))
+
+轮播图叠加：linear-gradient(to top, rgba(0,0,0,0.4), transparent)（保证文字可读的同时保留活力底色）
+
+四、Tailwind 配置集成
+在 tailwind.config.js 中扩展颜色和渐变，方便在组件中直接使用类名：
+
+js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#FF8A5C',
+          light: '#FFA07A',
+          dark: '#E06E3E',
+        },
+        secondary: {
+          yellow: '#FFD93D',
+          green: '#6BCB77',
+          blue: '#4D96FF',
+        },
+        background: {
+          light: '#F9F9F9',
+          white: '#FFFFFF',
+        },
+        text: {
+          primary: '#2E2E2E',
+          secondary: '#6B6B6B',
+        },
+      },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(135deg, #FF8A5C, #FFD93D)',
+        'gradient-card-hover': 'linear-gradient(145deg, rgba(255,138,92,0.1), rgba(77,150,255,0.1))',
+        'gradient-carousel': 'linear-gradient(to top, rgba(0,0,0,0.4), transparent)',
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+}
+五、应用示例
+1. 主按钮
+vue
+<Button class="bg-gradient-primary text-white hover:opacity-90 transition-opacity">
+  立即加入
+</Button>
+2. 板块卡片悬停效果
+vue
+<Card class="hover:bg-gradient-card-hover transition-all duration-300">
+  <!-- 内容 -->
+</Card>
+3. 导航激活状态
+vue
+<router-link to="/forum" class="text-secondary-blue font-medium" active-class="text-primary">
+  校园闲聊
+</router-link>
+4. 标签/徽章
+vue
+<Badge class="bg-secondary-yellow text-text-primary">新品</Badge>
+<Badge class="bg-secondary-green text-white">已找到</Badge>
+六、活力感增强技巧
+圆角：统一使用较大的圆角（如 rounded-lg、rounded-xl），让界面更友好。
+
+阴影：卡片使用柔和的阴影（如 shadow-md hover:shadow-lg），增加层次感。
+
+动画：按钮悬停时轻微放大（transform hover:scale-105 transition），轮播图文字淡入等。
+
+图标：多使用线条活泼的图标（如 Lucide 的 Smile、Zap、Sun 等），与配色呼应。

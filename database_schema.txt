@@ -1,0 +1,132 @@
+# 校园二手交易平台数据库表结构
+
+## 1. users表（用户表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 用户ID |
+| name | string | not null | 用户名称 |
+| email | string | unique, not null | 用户邮箱 |
+| email_verified_at | timestamp | nullable | 邮箱验证时间 |
+| password | string | not null | 加密后的密码 |
+| remember_token | string | nullable | 记住我令牌 |
+| username | string | unique | 用户名（用于登录） |
+| avatar | string | nullable | 用户头像URL |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+
+## 2. products表（商品表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 商品ID |
+| title | string | not null | 商品标题 |
+| category_id | integer | not null | 分类ID |
+| price | decimal(10,2) | not null | 商品价格 |
+| cover_img | string | nullable | 封面图片URL |
+| description | text | nullable | 商品描述 |
+| user_id | bigint unsigned | foreign key to users.id, not null | 发布者ID |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+
+## 3. conversations表（对话表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 对话ID |
+| user_id | bigint unsigned | foreign key to users.id, not null | 买家ID |
+| seller_id | bigint unsigned | foreign key to users.id, not null | 卖家ID |
+| product_id | bigint unsigned | foreign key to products.id, nullable | 关联商品ID（可选） |
+| resource_type | string | nullable | 资源类型（如product, lost_found等） |
+| resource_id | bigint unsigned | nullable | 资源ID（对应resource_type的具体资源） |
+| last_message | text | nullable | 最后一条消息内容 |
+| last_message_time | timestamp | nullable | 最后一条消息时间 |
+| unread_count | integer | default 0 | 未读消息数量 |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+
+## 4. messages表（消息表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 消息ID |
+| conversation_id | bigint unsigned | foreign key to conversations.id, not null | 所属对话ID |
+| sender_id | bigint unsigned | foreign key to users.id, not null | 发送者ID |
+| content | text | not null | 消息内容 |
+| is_read | boolean | default false | 是否已读 |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+
+## 5. favorites表（收藏表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 收藏ID |
+| user_id | unsigned bigint | foreign key to users.id, not null | 用户ID |
+| product_id | unsigned bigint | foreign key to products.id, not null | 商品ID |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+| unique constraint | - | user_id + product_id | 确保每个用户对每个商品只能收藏一次 |
+
+## 6. ratings表（评价表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 评价ID |
+| user_id | unsigned bigint | foreign key to users.id, not null | 评价用户ID |
+| product_id | unsigned bigint | foreign key to products.id, not null | 被评价商品ID |
+| rating | tinyint unsigned | between 1-5, not null | 评分（1-5星） |
+| comment | text | nullable | 评价内容 |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+| unique constraint | - | user_id + product_id | 确保每个用户对每个商品只能评价一次 |
+
+## 7. lost_found表（失物招领表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 失物招领ID |
+| title | string | not null | 标题 |
+| type | string | not null | 类型（lost/found） |
+| status | string | not null | 状态（active/resolved） |
+| location | string | not null | 地点 |
+| cover_img | string | nullable | 封面图片URL |
+| description | text | nullable | 描述 |
+| user_id | bigint unsigned | foreign key to users.id, not null | 发布者ID |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+
+## 8. topics表（话题表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 话题ID |
+| title | string | not null | 话题标题 |
+| content | text | not null | 话题内容 |
+| user_id | bigint unsigned | foreign key to users.id, not null | 发布者ID |
+| replies_count | integer | default 0 | 回复数量 |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+
+## 9. replies表（回复表）
+| 字段名 | 数据类型 | 约束 | 描述 |
+| --- | --- | --- | --- |
+| id | bigint unsigned | primary key, auto increment | 回复ID |
+| topic_id | bigint unsigned | foreign key to topics.id, not null | 所属话题ID |
+| user_id | bigint unsigned | foreign key to users.id, not null | 回复者ID |
+| content | text | not null | 回复内容 |
+| created_at | timestamp | nullable | 创建时间 |
+| updated_at | timestamp | nullable | 更新时间 |
+
+## 10. 系统默认表
+- password_resets（密码重置表）
+- failed_jobs（失败任务表）
+- personal_access_tokens（个人访问令牌表，用于Sanctum认证）
+
+## 表关系
+- users 1:N products（一个用户可以发布多个商品）
+- users 1:N lost_found（一个用户可以发布多个失物招领信息）
+- users 1:N topics（一个用户可以发布多个话题）
+- users 1:N replies（一个用户可以发布多个回复）
+- users 1:N conversations（一个用户可以参与多个对话）
+- users 1:N messages（一个用户可以发送多条消息）
+- users 1:N favorites（一个用户可以收藏多个商品）
+- users 1:N ratings（一个用户可以评价多个商品）
+- products 1:N conversations（一个商品可以关联多个对话）
+- products 1:N favorites（一个商品可以被多个用户收藏）
+- products 1:N ratings（一个商品可以被多个用户评价）
+- lost_found 1:N conversations（一个失物招领信息可以关联多个对话）
+- topics 1:N replies（一个话题可以包含多个回复）
+- conversations 1:N messages（一个对话包含多条消息）

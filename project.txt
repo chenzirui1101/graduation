@@ -1,0 +1,210 @@
+# 校园二手交易平台项目文档
+
+## 重要说明
+- **项目现状**：已完成的 Vue 3 + Laravel 前后端分离项目，包含认证、商品、收藏、聊天、评价、失物招领、论坛等功能。
+- **前端技术**：使用自定义组件和 Bootstrap 样式，未使用 Element Plus 或 shadcn-vue。
+- **数据来源**：所有数据通过 API 从后端获取，前端代码中使用了少量静态数据用于演示。
+
+---
+
+## 1. 项目概述
+- **项目名称**：校园二手交易平台
+- **功能模块**：
+  - 认证模块：登录、注册、忘记密码
+  - 商品模块：发布、浏览、搜索、收藏、评价
+  - 聊天模块：会话列表、消息发送与接收
+  - 失物招领模块：发布、浏览、状态管理
+  - 论坛模块：话题发布、回复、浏览
+  - 校园活动模块：活动列表、详情、分类
+  - 个人中心：个人信息、发布的商品、收藏的商品
+  - 更多模块：关于我们、联系我们
+- **前端特点**：
+  - 响应式设计，适配移动端和桌面端
+  - 现代化的 UI 设计，使用渐变、动画等效果
+  - 清晰的导航结构，便于用户浏览和使用
+  - 良好的用户体验，包括加载状态、错误处理等
+- **后端特点**：
+  - 使用 Laravel 框架，结构清晰
+  - RESTful API 设计
+  - Sanctum 认证
+  - 完善的中间件支持（认证、速率限制、跨域等）
+
+## 2. 技术栈
+| 部分 | 技术 | 版本 |
+|------|------|------|
+| 前端框架 | Vue 3 | 3.x |
+| 构建工具 | Vite | 4.x |
+| 样式 | SCSS + Bootstrap | 5.x |
+| 状态管理 | Pinia | 2.x |
+| HTTP 请求 | Axios | 1.x |
+| 后端框架 | Laravel | 9.x |
+| 数据库 | MySQL | 8.x |
+| 认证 | Sanctum | 3.x |
+
+## 3. 项目文件结构
+
+### 前端文件结构
+```
+src/
+├── assets/ # 静态资源
+│   ├── images/ # 图片资源
+│   └── styles/ # 样式文件
+│       ├── colors.css # 颜色定义
+│       ├── common.scss # 通用样式
+│       ├── main.css # 主样式文件
+│       └── variables.scss # 变量定义
+├── components/ # 组件
+│   ├── auth/ # 认证相关组件
+│   │   └── AuthModal.vue # 登录注册模态框
+│   ├── layout/ # 布局组件
+│   │   ├── AppHeader.vue # 应用头部
+│   │   └── MainLayout.vue # 主布局
+│   ├── ui/ # UI组件
+│   │   ├── Avatar.vue # 头像组件
+│   │   ├── Badge.vue # 徽章组件
+│   │   ├── Button.vue # 按钮组件
+│   │   ├── Card.vue # 卡片组件
+│   │   └── ...
+│   ├── CategoryNav.vue # 分类导航组件
+│   ├── ChatModal.vue # 聊天模态框组件
+│   ├── LostFoundCard.vue # 失物招领卡片组件
+│   ├── ProductCard.vue # 商品卡片组件
+│   └── PublishForm.vue # 发布表单组件
+├── router/ # 路由配置
+│   ├── index.js # 路由入口
+│   └── routes.js # 路由规则
+├── stores/ # Pinia状态管理
+│   ├── index.js # 状态管理入口
+│   └── modules/ # 模块
+│       └── user.js # 用户状态
+├── utils/ # 工具函数
+│   ├── auth.js # 认证相关工具
+│   ├── request.js # 请求工具
+│   └── storage.js # 存储工具
+├── views/ # 页面组件
+│   ├── Admin/ # 管理员页面
+│   ├── Chat/ # 聊天页面
+│   │   └── index.vue
+│   ├── Forum/ # 论坛页面
+│   │   ├── ForumDetail.vue # 话题详情
+│   │   └── ForumPage.vue # 话题列表
+│   ├── Home/ # 首页
+│   │   └── index.vue
+│   ├── Login/ # 登录页面
+│   │   └── index.vue
+│   ├── More/ # 更多页面
+│   │   ├── AboutUs.vue # 关于我们
+│   │   ├── ContactUs.vue # 联系我们
+│   │   └── MorePage.vue # 更多首页
+│   ├── ProductDetail/ # 商品详情
+│   │   └── index.vue
+│   ├── Profile/ # 个人中心
+│   │   └── index.vue
+│   ├── PublishProduct/ # 发布商品
+│   │   └── index.vue
+│   └── NotFound/ # 404页面
+│       └── index.vue
+├── api/ # API请求
+│   ├── index.js # API入口
+│   └── modules/ # API模块
+│       └── product.js # 商品相关API
+├── App.vue # 根组件
+└── main.js # 入口文件
+```
+
+### 后端文件结构
+```
+laravel/
+├── app/ # 应用代码
+│   ├── Console/ # 控制台命令
+│   ├── Events/ # 事件
+│   ├── Exceptions/ # 异常处理
+│   ├── Http/ # HTTP相关
+│   │   ├── Controllers/ # 控制器
+│   │   │   └── Api/ # API控制器
+│   │   └── Middleware/ # 中间件
+│   └── Models/ # 数据模型
+├── bootstrap/ # 启动文件
+├── config/ # 配置文件
+├── database/ # 数据库相关
+│   ├── migrations/ # 数据库迁移
+│   └── seeders/ # 数据填充
+├── public/ # 公共文件
+├── resources/ # 资源文件
+├── routes/ # 路由定义
+│   └── api.php # API路由
+├── storage/ # 存储目录
+└── vendor/ # 第三方依赖
+```
+
+## 4. 前后端交互说明
+- **API 基础路径**：假设已配置为 `/api`，所有请求通过 `src/utils/request.js` 中的 Axios 实例发送，已包含认证 token 自动附加等逻辑。
+- **认证**：登录成功后，后端返回 token，前端存储在 localStorage 或 Pinia 中，后续请求自动携带。
+- **数据获取**：在组件中使用 `onMounted` 或组合式函数调用 API，并将结果赋值给响应式变量。示例：
+  ```javascript
+  import { ref, onMounted } from 'vue'
+  import { getProductList } from '@/api/product'
+
+  const products = ref([])
+  onMounted(async () => {
+    const res = await getProductList({ page: 1 })
+    products.value = res.data.data
+  })
+  ```
+注意：所有示例代码中的静态数据仅为 UI 演示占位，必须替换为真实 API 调用。
+
+## 5. 后端核心逻辑摘要（供前端参考）
+后端已实现以下功能，所有 API 路径与参数请参考现有代码或接口文档：
+
+### 认证 API
+- `/api/auth/login` - 用户登录
+- `/api/auth/register` - 用户注册
+- `/api/auth/me` - 获取当前用户信息
+- `/api/auth/logout` - 用户登出
+- `/api/auth/captcha` - 获取验证码
+
+### 商品 API
+- `/api/products` (GET) - 获取商品列表
+- `/api/products` (POST) - 发布商品
+- `/api/products/{id}` (GET) - 获取商品详情
+- `/api/products/{id}` (PUT) - 更新商品
+- `/api/products/{id}` (DELETE) - 删除商品
+- `/api/products/my/list` - 获取用户发布的商品
+
+### 收藏 API
+- `/api/favorites` (GET) - 获取用户收藏列表
+- `/api/favorites` (POST) - 收藏商品
+- `/api/favorites/{productId}` (DELETE) - 取消收藏
+- `/api/favorites/check/{productId}` - 检查商品是否被收藏
+- 批量检查接口
+
+### 聊天 API
+- `/api/chat/conversations` - 获取会话列表
+- `/api/chat/conversations/{id}/messages` - 获取会话消息
+
+### 评价 API
+- `/api/products/{productId}/ratings` - 获取商品评价
+- `/api/ratings` - 发布评价
+
+### 失物招领 API
+- `/api/lost-found` (GET) - 获取失物招领列表
+- `/api/lost-found` (POST) - 发布失物招领
+- `/api/lost-found/{id}` (GET) - 获取失物招领详情
+
+### 论坛 API
+- `/api/topics` (GET) - 获取话题列表
+- `/api/topics` (POST) - 发布话题
+- `/api/topics/{id}` (GET) - 获取话题详情
+- `/api/topics/{id}/replies` (GET) - 获取话题回复
+- `/api/topics/{id}/replies` (POST) - 发布回复
+
+### 中间件
+认证、速率限制、跨域等已配置好
+
+注意：前端在调用这些 API 时，需通过 src/api/ 下已封装好的模块，或直接使用 src/utils/request.js 发送请求。无需修改后端代码。
+
+## 6. 注意事项
+- 所有新增的 .vue 文件应遵循 Vue 3 组合式 API 风格。
+- 后端 API 返回的数据格式请参考现有接口文档，确保前端正确处理。
+- 前端组件使用 Bootstrap 样式，确保页面响应式和一致性。
+- 所有 API 调用应添加错误处理和加载状态，提升用户体验。
