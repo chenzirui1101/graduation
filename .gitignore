@@ -46,10 +46,10 @@ coverage/
 .nyc_output/
 
 # Misc
-*.md
 *.docx
 
 # Keep project documentation
 !create_table_sql.txt
 !database_schema.txt
 !project.txt
+!README.md
